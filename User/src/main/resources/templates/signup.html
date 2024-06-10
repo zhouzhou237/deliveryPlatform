@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="Askbootstrap" />
+  <meta name="author" content="Askbootstrap" />
+  <title>Happy Meal</title><!-- Slick Slider -->
+  <link rel="stylesheet" type="text/css" href="/css/slick.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/slick-theme.min.css" /><!-- Feather Icon-->
+  <link href="/css/feather.css" rel="stylesheet" type="text/css" /><!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet" /><!-- Custom styles for this template -->
+  <link href="/css/style.css" rel="stylesheet" /><!-- Sidebar CSS -->
+  <link href="/css/demo.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="osahan-signup login-page">
+    <video loop="" autoplay="" muted="" id="vid"><source src="img/bg.mp4" type="video/mp4" /><source src="img/bg.mp4" type="video/ogg" />Your browser does not support the video tag.</video>
+    <div class="d-flex align-items-center justify-content-center flex-column vh-100">
+      <div class="px-5 col-md-6 ml-auto">
+        <div class="px-5 col-10 mx-auto">
+          <h2 class="text-dark my-0">Hello There.</h2>
+          <p class="text-50">Sign up to continue</p>
+          <form id="signupForm" class="mt-5 mb-4" action="/api/users/signup" method="post">
+            <div class="form-group">
+              <label for="exampleInputName1" class="text-dark">Name</label>
+              <input type="text" name="uname" placeholder="Enter Name" class="form-control" id="exampleInputName1" aria-describedby="nameHelp" />
+            </div>
+            <div class="form-group">
+              <label for="exampleInputNumber1" class="text-dark">Mobile Number</label>
+              <input type="text" name="phone" placeholder="Enter Mobile" class="form-control" id="exampleInputNumber1" aria-describedby="numberHelp" />
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1" class="text-dark">Password</label>
+              <input type="password" name="password" placeholder="Enter Password" class="form-control" id="exampleInputPassword1" />
+            </div>
+            <div class="form-group">
+              <label for="exampleInputAddress1" class="text-dark">Address</label>
+              <input type="text" name="address" placeholder="Enter Address" class="form-control" id="exampleInputAddress1" aria-describedby="addressHelp" />
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1" class="text-dark">Email</label>
+              <input type="email" name="email" placeholder="Enter Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPayment1" class="text-dark">Payment</label>
+              <input type="text" name="payment" placeholder="Enter Payment Method" class="form-control" id="exampleInputPayment1" aria-describedby="paymentHelp" />
+            </div>
+            <div class="form-group">
+              <label for="exampleInputFriend1" class="text-dark">Friend</label>
+              <input type="text" name="friend" placeholder="Enter Friend's Name" class="form-control" id="exampleInputFriend1" aria-describedby="friendHelp" />
+            </div>
+            <button class="btn btn-primary btn-lg btn-block">SIGN UP</button>
+            <div class="py-2">
+            </div>
+          </form>
+        </div>
+        <div class="new-acc d-flex align-items-center justify-content-center">
+          <a href="/login">
+          <p class="text-center m-0">Already an account? Sign in</p></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="responseModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="responseModalLabel">Message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modalMessage">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="modalButton">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var form = event.target;
+      var data = {
+        uname: form.uname.value,
+        phone: form.phone.value,
+        password: form.password.value,
+        address: form.address.value,
+        email: form.email.value,
+        payment: form.payment.value,
+        friend: form.friend.value
+      };
+
+      console.log("Sending data:", data);
+
+      axios.post('/api/users/signup', data)
+              .then(response => {
+                console.log("Response received:", response);
+                document.getElementById('modalMessage').innerText = response.data;
+                $('#responseModal').modal('show');
+                document.getElementById('modalButton').onclick = function() {
+                  if (response.data === 'User registered successfully!') {
+                    window.location.href = '/login';
+                  } else {
+                    $('#responseModal').modal('hide');
+                  }
+                };
+              })
+              .catch(error => {
+                console.log("Error occurred:", error);
+                document.getElementById('modalMessage').innerText = error.response.data || 'An error occurred';
+                $('#responseModal').modal('show');
+                document.getElementById('modalButton').onclick = function() {
+                  $('#responseModal').modal('hide');
+                };
+              });
+    });
+  </script>
+</body>
+</html>

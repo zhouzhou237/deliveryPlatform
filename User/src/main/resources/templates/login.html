@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="Askbootstrap" />
+  <meta name="author" content="Askbootstrap" />
+  <title>Happy Meal</title><!-- Slick Slider -->
+  <link rel="stylesheet" type="text/css" href="/css/slick.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/slick-theme.min.css" /><!-- Feather Icon-->
+  <link href="/css/feather.css" rel="stylesheet" type="text/css" /><!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet" /><!-- Custom styles for this template -->
+  <link href="/css/style.css" rel="stylesheet" /><!-- Sidebar CSS -->
+  <link href="/css/demo.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="login-page vh-100">
+    <video loop="" autoplay="" muted="" id="vid"><source src="img/bg.mp4" type="video/mp4" /><source src="img/bg.mp4" type="video/ogg" />Your browser does not support the video tag.</video>
+    <div class="d-flex align-items-center justify-content-center vh-100">
+      <div class="px-5 col-md-6 ml-auto">
+        <div class="px-5 col-10 mx-auto">
+          <h2 class="text-dark my-0">Welcome Back</h2>
+          <p class="text-50">Sign in to continue</p>
+          <form id="loginForm" class="mt-5 mb-4">
+            <div class="form-group">
+              <label for="exampleInputUname1" class="text-dark">Username</label>
+              <input type="text" name="uname" placeholder="Enter Username" class="form-control" id="exampleInputUname1" aria-describedby="unameHelp" />
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1" class="text-dark">Password</label>
+              <input type="password" name="password" placeholder="Enter Password" class="form-control" id="exampleInputPassword1" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">SIGN IN</button>
+          </form>
+          <a href="/forgot_password"  class="text-decoration-none">
+          <p class="text-center">Forgot your password?</p></a>
+          <div class="d-flex align-items-center justify-content-center">
+            <a href="/signup">
+            <p class="text-center m-0">Don't have an account? Sign up</p></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="responseModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="responseModalLabel">Message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modalMessage"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="modalButton">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script><!-- slick Slider JS-->
+  <script type="text/javascript" src="/js/slick.min.js"></script><!-- Sidebar JS-->
+  <script type="text/javascript" src="/js/hc-offcanvas-nav.js"></script><!-- Custom scripts for all pages-->
+  <script type="text/javascript" src="/js/osahan.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var form = event.target;
+      var data = {
+        uname: form.uname.value,
+        password: form.password.value
+      };
+
+      console.log("Sending data:", data);
+
+      axios.post('/api/users/login', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+              .then(response => {
+                console.log("Response received:", response);
+                if (response.data === 'Login successful!') {
+                  window.location.href = '/index';
+                } else {
+                  document.getElementById('modalMessage').innerText = response.data;
+                  $('#responseModal').modal('show');
+                }
+              })
+              .catch(error => {
+                console.log("Error occurred:", error);
+                document.getElementById('modalMessage').innerText = error.response.data || 'An error occurred';
+                $('#responseModal').modal('show');
+              });
+    });
+  </script>
+</body>
+</html>
